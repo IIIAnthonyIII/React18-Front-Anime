@@ -1,14 +1,16 @@
 import apiClient from "./AxiosAPI";
 
-// const getAnimes = async () => {
-//   try {
-//     const response = await apiClient.get('anime');
-//     return response;
-//   } catch (error) {
-//     return error;
-//   }
-// };
-const getAnimes = async (page, pageSize) => {
+const getAnimes = async () => {
+  try {
+    const response = await apiClient.get('anime');
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+// API parametros
+const getAnimesParams = async (page, pageSize) => {
     try {
       const response = await apiClient.get(`anime?per_page=${pageSize}&page=${page}`);
       return response;
@@ -46,6 +48,7 @@ const deleteAnime = async (id, animeData) => {
 
 export default {
   getAnimes,
+  getAnimesParams,
   createAnime,
   editAnime,
   deleteAnime,

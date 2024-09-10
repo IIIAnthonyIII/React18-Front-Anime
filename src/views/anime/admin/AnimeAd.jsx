@@ -1,74 +1,75 @@
 import moment from 'moment';
-import { notification, Table, Tag } from 'antd';
+import { Button, Input, notification, Space, Table, Tag, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import AnimeService from '../../../services/AnimeService';
 import { AnimeErrors } from '../../../constants/ErrorMessages';
 import Notification from '../../../components/notification/Notification';
+import { DeleteFilled, EditFilled, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 
 const AnimeAd = () => {
   let columns                         = [];
-  let filterMedic                     = [];
-  let uniqueMedic                     = new Set();
+  let uniqueEstado                     = new Set();
   const [data, setData]               = useState([]);
   const [error, setError]             = useState(null);
   const [loading, setLoading]         = useState(false);
   const [searchText, setSearchText]   = useState('');
   const [api, contextHolder]          = notification.useNotification();
+  let filterEstado                    = [
+    { text: "Activo", value: "A" },
+    { text: "Inactivo", value: "I" }
+  ];
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
       pageSize: 5,
       pageSizeOptions: [5, 10, 20, 50, 100],
       showQuickJumper: true,
-      total: 0,
+      // total: 0,
       position: ["bottomRight"]
     },
   });
-  let count = 0;
 
   useEffect(() => {
-    // fetchAnime();
-    fetchAnime(tableParams.pagination.current, tableParams.pagination.pageSize);
-  // }, [JSON.stringify(tableParams)]);
+    fetchAnime();
+    // API parametros
+    // fetchAnime(tableParams.pagination.current, tableParams.pagination.pageSize);
+  // }, [tableParams.pagination.current, tableParams.pagination.pageSize]);
   }, []);
 
-  // const fetchAnime = async () => {
-  //   let response;
-  //   setLoading(true);
-  //   try {
-  //     response = await AnimeService.getAnimes();
-  //     setData(response.data.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //     response = {
-  //       status: response.status,
-  //       response: {
-  //         data: { error: AnimeErrors.animeNotGet }
-  //       }
-  //     }
-  //     Notification(api, response);
-  //   } finally {
-  //     setLoading(false);
-  //     count++;
-  //     console.log(count);
-  //   }
-  // };
-
-  const fetchAnime = async (page, pageSize) => {
+  const fetchAnime = async () => {
     let response;
     setLoading(true);
     try {
-      response = await AnimeService.getAnimes(page, pageSize);
+      response = await AnimeService.getAnimes();
       setData(response.data.data);
-      setTableParams({
-        ...tableParams,
+    } catch (error) {
+      response = {
+        status: response.status,
+        response: {
+          data: { error: AnimeErrors.animeNotGet }
+        }
+      }
+      Notification(api, response);
+    } finally {
+      setLoading(false);
+    }
+  };
+  // API parametros
+  const fetchAnimeParams = async (page, pageSize) => {
+    let response;
+    setLoading(true);
+    try {
+      response = await AnimeService.getAnimesParams(page, pageSize);
+      setData(response.data.data);
+      setTableParams(prevTableParams => ({
+        ...prevTableParams,
         pagination: {
-          ...tableParams.pagination,
+          ...prevTableParams.pagination,
           total: response.data.pagination.total,
           current: response.data.pagination.current_page,
           pageSize: response.data.pagination.per_page,
         },
-      });
+      }));
     } catch (error) {
       response = {
         status: response.status,
@@ -83,20 +84,16 @@ const AnimeAd = () => {
     }
   };
   
-  //Llenar filtros
+  // Llenar filtros
   // data.forEach(element => {
-  //   if (!uniqueMedic.has(element.nombre_apellido)) {
-  //     uniqueMedic.add(element.nombre_apellido);
-  //     filterMedic.push({
+  //   if (!uniqueEstado.has(element.nombre_apellido)) {
+  //     uniqueEstado.add(element.nombre_apellido);
+  //     filterEstado.push({
   //       text: element.nombre_apellido,
   //       value: element.nombre_apellido,
   //     });
   //   }
   // });
-
-  // const generatePDF = (data) => {
-  //   PDFExaminationOrder(data)
-  // };
 
   //Llenar columnas
   columns = [
@@ -123,7 +120,7 @@ const AnimeAd = () => {
       dataIndex: "episodes",
       align: "center",
       sorter: {
-        compare: (a, b) => a.episodes.localeCompare(b.episodes),
+        compare: (a, b) => a.episodes - b.episodes,
         multiple: 3,
       },
       width: 110,
@@ -151,89 +148,59 @@ const AnimeAd = () => {
           </Tag>
         );
       },
+      filterSearch: true,
+      filters: filterEstado,
+      onFilter: (value, data) => data.status.startsWith(value),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }}/>,
     },
-    // {
-    //   title: "Médico",
-    //   dataIndex: "nombre_apellido",
-    //   sorter: {
-    //     compare: (a, b) => a.nombre_apellido.localeCompare(b.nombre_apellido),
-    //     multiple: 3,
-    //   },
-    //   filters: filterMedic,
-    //   onFilter: (value, data) => data.nombre_apellido.startsWith(value),
-    //   filterSearch: true,
-    // },
-    // {
-    //   title: "Examen",
-    //   dataIndex: "examen",
-    //   align: "center",
-    //   render: (_, { analisis }) => (
-    //     <>
-    //       {analisis.map((analysis) => 
-    //           analysis.examen.map((exam) => (
-    //             <Tag key={exam.id_examen}>
-    //               {exam.examen}
-    //             </Tag>
-    //           )
-    //         ))
-    //       }
-    //     </>
-    //   ),
-    // },
-    // {
-    //   title: "Acciones",
-    //   key: "action",
-    //   align: "center",
-    //   render: (_, record) => (
-    //     <Space size="middle">
-    //       <Tooltip title='Descargar orden'>
-    //         <Button className="actions" onClick={() => generatePDF(record)}>
-    //           <FilePdfOutlined className="download-icon"/>
-    //         </Button>
-    //       </Tooltip>
-    //       <Tooltip title='Editar'>
-    //         <Button className="actions" onClick={() => showEditCreateModal(record, 'Edit')}>
-    //           <EditFilled className="edit-icon"/>
-    //         </Button>
-    //       </Tooltip>
-    //       <Tooltip title='Eliminar'>
-    //         <Button className="actions" onClick={() => showDeleteModal(record)}>
-    //           <DeleteFilled className="delete-icon" />
-    //         </Button>
-    //       </Tooltip>
-    //     </Space>
-    //   ),
-    // },
+    {
+      title: "Acciones",
+      key: "action",
+      align: "center",
+      render: (_, record) => (
+        <Space size="middle">
+          <Tooltip title='Editar'>
+            <Button className="actions" onClick={() => showEditCreateModal(record, 'Edit')}>
+              <EditFilled className="edit-icon"/>
+            </Button>
+          </Tooltip>
+          <Tooltip title='Eliminar'>
+            <Button className="actions" onClick={() => showDeleteModal(record)}>
+              <DeleteFilled className="delete-icon"/>
+            </Button>
+          </Tooltip>
+        </Space>
+      ),
+    },
   ];
 
   //Propiedades de la tabla
-  // const handleTableChange = (pagination, filters, sorter) => {
-  //   setTableParams({
-  //     pagination,
-  //     filters,
-  //     sortOrder: Array.isArray(sorter) ? undefined : sorter.order,
-  //     sortField: Array.isArray(sorter) ? undefined : sorter.field,
-  //   });
-  // };
-  const handleTableChange = (pagination) => {
-    // if ( tableParams.pagination.current !== pagination.current ||
-    //   tableParams.pagination.pageSize !== pagination.pageSize) {
-      setTableParams({
-        ...tableParams,
+  const handleTableChange = (pagination, filters, sorter) => {
+    setTableParams({
+      pagination,
+      filters,
+      sortOrder: Array.isArray(sorter) ? undefined : sorter.order,
+      sortField: Array.isArray(sorter) ? undefined : sorter.field,
+    });
+  };
+  // API parametros
+  const handleTableChangeParams = (pagination) => {
+    if (pagination.current !== tableParams.pagination.current ||
+      pagination.pageSize !== tableParams.pagination.pageSize) {
+      setTableParams(prevTableParams => ({
+        ...prevTableParams,
         pagination: {
           ...pagination,
         },
-      });
-    // }
+      }));
+    }
   };
 
-  const filteredData = data;
-  // data.filter(item => 
-  //   item.paciente.toLowerCase().includes(searchText.toLowerCase()) ||
-  //   item.nombre_apellido.toLowerCase().includes(searchText.toLowerCase()) ||
-  //   item.paciente_cedula.toLowerCase().includes(searchText.toLowerCase()) ||
-  //   item.especialidad.toLowerCase().includes(searchText.toLowerCase())
-  // );
+  const filteredData = data.filter(item => 
+    item.title.toLowerCase().includes(searchText.toLowerCase())     ||
+    item.name.toLowerCase().includes(searchText.toLowerCase())      ||
+    item.dateOfIssue.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   //Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -268,23 +235,11 @@ const AnimeAd = () => {
     setIsDeleteModalOpen(false);
     fetchExaminationOrder();
   };
-  // const generatePDF2 = () => {
-  //   const doc = new jsPDF();
-  //   doc.setFontSize(12);
-  //   doc.text('Reporte de Ordenes de Examenes',20, 20,);
-  //   const usersData = data.map(mantexamen => [mantexamen.paciente, mantexamen.paciente_cedula, 
-  //     mantexamen.nombre_apellido, mantexamen.especialidad
-  //   ]);
-  //   doc.autoTable({
-  //     head: [['Paciente', 'Cédula', 'Medico', 'Especialidad']],
-  //     body: usersData,
-  //   });
-  //   doc.save('reporte_OrdExamen.pdf');
-  // };
+
   return (
     <div>
-      {/* <div className="header-content">
-        <h3>Orden de examenes</h3>
+      <div className="header-content">
+        <h3>Animes</h3>
         <div className="d-flex p-0 m-0 align-items-center">
           <div className="input-group d-flex border align-items-center me-3">
             <SearchOutlined className="mx-2"/>
@@ -294,19 +249,19 @@ const AnimeAd = () => {
               onChange={e => setSearchText(e.target.value)}
             />
           </div>
-          <Button className="rounded-pill me-2" type="primary" onClick={generatePDF2}>
+          {/* <Button className="rounded-pill me-2" type="primary" onClick={generatePDF2}>
             <FilePdfOutlined /> Reporte
-          </Button>
+          </Button> */}
           <Button className="rounded-pill" type="primary" onClick={() => showEditCreateModal(null, 'Create')}>
             <PlusCircleOutlined /> Crear
           </Button>
         </div>
-      </div> */}
+      </div>
       {contextHolder}
       <Table responsive
         loading={loading}
         columns={columns}
-        dataSource={data}
+        dataSource={filteredData}
         rowKey={"id"}
         pagination={tableParams.pagination}
         onChange={handleTableChange}/>

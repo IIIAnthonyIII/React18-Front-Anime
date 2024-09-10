@@ -4,3 +4,33 @@
   padding: 2rem;
   text-align: center;
 }
+
+/* Style components */
+.header-content{
+  border: 1px solid red;
+  display: flex;
+  justify-content: space-between;
+  /* margin-top: 8%;
+  margin-bottom: 1%;
+  padding-left: 1%;
+  padding-right: 1%; */
+}
+
+/* Styles Table */
+.actions{
+  padding: 7px !important;
+  border-radius: 100% !important;
+  font-size: 1rem !important;
+}
+
+.actions .delete-icon {
+  color: red;
+}
+
+.actions .edit-icon {
+  color: #1a6ab9;
+}
+
+.actions .download-icon {
+  color: #33d15a;
+}

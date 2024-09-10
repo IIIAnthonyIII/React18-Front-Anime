@@ -9,7 +9,8 @@ const RouterApp = () => {
     <div>
       {/* <Navigation /> */}
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        {/* <Route path="/" element={<Dashboard />} /> */}
+        <Route path="/" element={<AnimeAd />} />
         <Route path="/animead" element={<AnimeAd />} />
         <Route path="*" element={<Error />} />
       </Routes>
