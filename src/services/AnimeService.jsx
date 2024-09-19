@@ -2,7 +2,7 @@ import apiClient from "./AxiosAPI";
 
 const getAnimes = async () => {
   try {
-    const response = await apiClient.get('anime');
+    const response = await apiClient.get('anime?sort=-created_at');
     return response;
   } catch (error) {
     return error;
@@ -46,10 +46,20 @@ const deleteAnime = async (id, animeData) => {
   }
 };
 
+const activeAnime = async (id) => {
+  try {
+    const response = await apiClient.put(`anime/activar/${id}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
 export default {
   getAnimes,
   getAnimesParams,
   createAnime,
   editAnime,
   deleteAnime,
+  activeAnime
 };

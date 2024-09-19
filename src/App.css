@@ -1,10 +1,3 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
 /* Style components */
 .header-content{
   border: 1px solid red;
@@ -14,6 +7,10 @@
   margin-bottom: 1%;
   padding-left: 1%;
   padding-right: 1%; */
+}
+.footer{
+  display: flex;
+  justify-content: end;
 }
 
 /* Styles Table */
@@ -33,4 +30,29 @@
 
 .actions .download-icon {
   color: #33d15a;
+}
+
+.actions .active-icon {
+  color: orange;
+}
+
+/* Styles Search Input */
+.input-group {
+  border-radius: 20px;
+  padding: 3px;
+  width: fit-content;
+  margin-right: 5px;
+}
+
+.input-group input {
+  border: 0;
+  outline: none;
+  padding: 2px;
+  width: 200px;
+  background: #f6fafd;
+}
+
+.input-group input:focus {
+  box-shadow: none;
+  outline: none;
 }

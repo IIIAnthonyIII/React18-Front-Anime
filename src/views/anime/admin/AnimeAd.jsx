@@ -1,20 +1,23 @@
+import "./AnimeAd.css";
 import moment from 'moment';
-import { Button, Input, notification, Space, Table, Tag, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import AnimeService from '../../../services/AnimeService';
 import { AnimeErrors } from '../../../constants/ErrorMessages';
+import DeleteActiveAnimeAd from "./delete-active/DeleteActiveAnimeAd";
+import EditCreateAnimeAd from "./edit-create/EditCreateAnimeAd";
 import Notification from '../../../components/notification/Notification';
-import { DeleteFilled, EditFilled, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, Input, notification, Space, Table, Tag, Tooltip } from 'antd';
+import { CheckCircleOutlined, CloseCircleOutlined, DeleteFilled, EditFilled, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 
 const AnimeAd = () => {
   let columns                         = [];
-  let uniqueEstado                     = new Set();
+  let uniqueEstado                    = new Set();
   const [data, setData]               = useState([]);
-  const [error, setError]             = useState(null);
-  const [loading, setLoading]         = useState(false);
   const [searchText, setSearchText]   = useState('');
+  const [loading, setLoading]         = useState(false);
   const [api, contextHolder]          = notification.useNotification();
-  let filterEstado                    = [
+  const scroll                        = { x: 'max-content', y: "70vh" };
+  const filterEstado                  = [
     { text: "Activo", value: "A" },
     { text: "Inactivo", value: "I" }
   ];
@@ -98,6 +101,15 @@ const AnimeAd = () => {
   //Llenar columnas
   columns = [
     {
+      render: (_, { status }) => {
+        let color = status === 'A' ? 'green' : 'red';
+        return (
+          <div style={{ background: color, width: 10, height: 40, borderRadius: 100 }}></div>
+        );
+      },
+      width: 40,
+    },
+    {
       title: "Título",
       dataIndex: "title",
       sorter: {
@@ -133,19 +145,24 @@ const AnimeAd = () => {
         compare: (a, b) => new Date(a.dateOfIssue) - new Date(b.dateOfIssue),
         multiple: 4,
       },
-      render: (text) => moment(text).format('DD-MM-YYYY HH:mm:ss'),
+      render: (text) => moment(text).format('DD-MM-YYYY'),
     },
     {
       title: "Estado",
       dataIndex: "status",
       align: "center",
-      render: (_, { status }) => {
+      render: (_, { id, status }) => {
         let color = status === 'A' ? 'green' : 'red';
-        let estado = status === 'A' ? 'Activo' : 'Inactivo';
         return (
-          <Tag color={color}>
-            {estado}
-          </Tag>
+          <Space size="middle">
+            { status === 'A' 
+              ? ( <Tag color={color}>Activo</Tag> )
+              : ( <Tooltip title='Activar'>
+                <Button className="actions" onClick={() => showDeleteActiveModal(id, 'Activar')}>
+                  <CheckCircleOutlined className="active-icon"/>
+                </Button>
+                </Tooltip>)}
+          </Space>
         );
       },
       filterSearch: true,
@@ -160,13 +177,18 @@ const AnimeAd = () => {
       render: (_, record) => (
         <Space size="middle">
           <Tooltip title='Editar'>
-            <Button className="actions" onClick={() => showEditCreateModal(record, 'Edit')}>
+            <Button className="actions" onClick={() => showEditCreateModal(record, 'Editar')}>
               <EditFilled className="edit-icon"/>
             </Button>
           </Tooltip>
-          <Tooltip title='Eliminar'>
-            <Button className="actions" onClick={() => showDeleteModal(record)}>
+          <Tooltip title='Desactivar'>
+            <Button className="actions" onClick={() => showDeleteActiveModal(record, 'Desactivar')}>
               <DeleteFilled className="delete-icon"/>
+            </Button>
+          </Tooltip>
+          <Tooltip title='Perma delete'>
+            <Button className="actions" onClick={() => showDeleteActiveModal(record, 'Eliminar definitivamente')}>
+              <CloseCircleOutlined className="delete-icon"/>
             </Button>
           </Tooltip>
         </Space>
@@ -218,12 +240,13 @@ const AnimeAd = () => {
   const handleSubmit = (axiosResponse) => {
     Notification(api, axiosResponse);
     setIsModalOpen(false);
-    fetchExaminationOrder();
+    fetchAnime();
   };
   
-  //Delete
+  //Delete-Active
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const showDeleteModal = (item) => {
+  const showDeleteActiveModal = (item, action) => {
+    setAction(action);
     setCurrentItem(item);
     setIsDeleteModalOpen(true);
   };
@@ -233,7 +256,7 @@ const AnimeAd = () => {
   const handleDelete = (axiosResponse) => {
     Notification(api, axiosResponse);
     setIsDeleteModalOpen(false);
-    fetchExaminationOrder();
+    fetchAnime();
   };
 
   return (
@@ -246,13 +269,9 @@ const AnimeAd = () => {
             <Input className="rounded-pill"
               placeholder="Buscar paciente"
               value={searchText}
-              onChange={e => setSearchText(e.target.value)}
-            />
+              onChange={e => setSearchText(e.target.value)} />
           </div>
-          {/* <Button className="rounded-pill me-2" type="primary" onClick={generatePDF2}>
-            <FilePdfOutlined /> Reporte
-          </Button> */}
-          <Button className="rounded-pill" type="primary" onClick={() => showEditCreateModal(null, 'Create')}>
+          <Button className="rounded-pill" type="primary" onClick={() => showEditCreateModal(null, 'Crear')}>
             <PlusCircleOutlined /> Crear
           </Button>
         </div>
@@ -264,9 +283,10 @@ const AnimeAd = () => {
         dataSource={filteredData}
         rowKey={"id"}
         pagination={tableParams.pagination}
-        onChange={handleTableChange}/>
-      {/* {isModalOpen && (
-        <EditCreateExaminationOrder
+        onChange={handleTableChange}
+        scroll={scroll}/>
+      {isModalOpen && (
+        <EditCreateAnimeAd
           isModalOpen={isModalOpen}
           handleCancel={handleCancel}
           handleSubmit={handleSubmit}
@@ -274,12 +294,13 @@ const AnimeAd = () => {
           action={action} />
       )}
       {isDeleteModalOpen && (
-        <DeleteExaminationOrder 
+        <DeleteActiveAnimeAd 
           isDeleteModalOpen={isDeleteModalOpen}
           handleDelete={handleDelete}
           handleDeleteCancel={handleDeleteCancel}
-          initialValues={currentItem} />
-      )} */}
+          initialValues={currentItem} 
+          action={action} />
+      )}
     </div>
   );
 };
