@@ -6,8 +6,9 @@ import { AnimeErrors } from '../../../constants/ErrorMessages';
 import DeleteActiveAnimeAd from "./delete-active/DeleteActiveAnimeAd";
 import EditCreateAnimeAd from "./edit-create/EditCreateAnimeAd";
 import Notification from '../../../components/notification/Notification';
-import { Button, Input, notification, Space, Table, Tag, Tooltip } from 'antd';
-import { CheckCircleOutlined, CloseCircleOutlined, DeleteFilled, EditFilled, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, Image, Input, notification, Space, Table, Tag, Tooltip } from 'antd';
+import { CheckCircleOutlined, CloseCircleOutlined, DeleteFilled, DownloadOutlined, EditFilled, PlusCircleOutlined, RotateLeftOutlined, RotateRightOutlined, SearchOutlined, SwapOutlined, UndoOutlined, ZoomInOutlined, ZoomOutOutlined } from '@ant-design/icons';
+import environment from "../../../environment/environment";
 
 const AnimeAd = () => {
   let columns                         = [];
@@ -98,6 +99,21 @@ const AnimeAd = () => {
   //   }
   // });
 
+  const onDownload = (imgUrl) => {
+    fetch(imgUrl)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = imgUrl.split('/').pop();;
+        document.body.appendChild(link);
+        link.click();
+        URL.revokeObjectURL(url);
+        link.remove();
+      });
+  };
+
   //Llenar columnas
   columns = [
     {
@@ -108,6 +124,39 @@ const AnimeAd = () => {
         );
       },
       width: 40,
+    },
+    {
+      title: "Portada",
+      dataIndex: "image",
+      render: (_, { image }) => {
+        return (
+          <Image width={50}
+            height={50}
+            src={image}
+            fallback={environment.errorImage}
+            preview={{
+              toolbarRender: (_,
+                {
+                  image: { url },
+                  transform: { scale },
+                  actions: { onFlipY, onFlipX, onRotateLeft, onRotateRight, onZoomOut, onZoomIn, onReset },
+                },
+              ) => (
+                <Space size={12} className="toolbar-wrapper">
+                  <DownloadOutlined onClick={() => onDownload(url)} />
+                  <SwapOutlined rotate={90} onClick={onFlipY} />
+                  <SwapOutlined onClick={onFlipX} />
+                  <RotateLeftOutlined onClick={onRotateLeft} />
+                  <RotateRightOutlined onClick={onRotateRight} />
+                  <ZoomOutOutlined disabled={scale === 1} onClick={onZoomOut} />
+                  <ZoomInOutlined disabled={scale === 50} onClick={onZoomIn} />
+                  <UndoOutlined onClick={onReset} />
+                </Space>
+              ),
+            }}
+          />
+        );
+      },
     },
     {
       title: "Título",

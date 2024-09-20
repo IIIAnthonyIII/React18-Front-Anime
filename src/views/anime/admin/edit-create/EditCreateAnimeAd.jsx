@@ -1,9 +1,11 @@
 import moment from 'moment';
 import "./EditCreateAnimeAd.css";
 import React, { useEffect, useState } from 'react';
-import { Button, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select } from 'antd';
+import { Button, Col, DatePicker, Form, Image, Input, InputNumber, Modal, Row, Select, Space } from 'antd';
 import dayjs from 'dayjs';
 import AnimeService from '../../../../services/AnimeService';
+import { DownloadOutlined, RotateLeftOutlined, RotateRightOutlined, SwapOutlined, UndoOutlined, ZoomInOutlined, ZoomOutOutlined } from '@ant-design/icons';
+import environment from '../../../../environment/environment';
 
 const EditCreateAnimeAd = ({ isModalOpen, handleSubmit, handleCancel, initialValues, action }) => {
   const [form]                                  = Form.useForm();
@@ -77,12 +79,45 @@ const EditCreateAnimeAd = ({ isModalOpen, handleSubmit, handleCancel, initialVal
       footer={null}
     >
       <Form form={form} layout="vertical" onFinish={onFinish}>
-        <Form.Item name="title" label="Titulo" rules={[{ required: true, message: 'Por favor ingrese el titulo!' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="name" label="Nombre">
-          <Input />
-        </Form.Item>
+        <Row gutter={[16, 8]}>
+          <Col span={12}>
+            <Form.Item name="title" label="Titulo" rules={[{ required: true, message: 'Por favor ingrese el titulo!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="name" label="Nombre">
+              <Input />
+            </Form.Item>
+            <Form.Item name="image" label="Url imagen">
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Image height={240}
+              src={initialValues.image}
+              fallback={environment.errorImage}
+              preview={{
+                toolbarRender: (_,
+                  {
+                    image: { url },
+                    transform: { scale },
+                    actions: { onFlipY, onFlipX, onRotateLeft, onRotateRight, onZoomOut, onZoomIn, onReset },
+                  },
+                ) => (
+                  <Space size={12} className="toolbar-wrapper">
+                    <DownloadOutlined onClick={() => onDownload(url)} />
+                    <SwapOutlined rotate={90} onClick={onFlipY} />
+                    <SwapOutlined onClick={onFlipX} />
+                    <RotateLeftOutlined onClick={onRotateLeft} />
+                    <RotateRightOutlined onClick={onRotateRight} />
+                    <ZoomOutOutlined disabled={scale === 1} onClick={onZoomOut} />
+                    <ZoomInOutlined disabled={scale === 50} onClick={onZoomIn} />
+                    <UndoOutlined onClick={onReset} />
+                  </Space>
+                ),
+              }}
+            />
+          </Col>
+        </Row>
         <Row gutter={[16, 8]}>
           <Col span={12}>
             <Form.Item name="episodes" label="Número de episodios">

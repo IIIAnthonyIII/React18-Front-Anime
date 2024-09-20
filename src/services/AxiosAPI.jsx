@@ -1,9 +1,9 @@
 import axios from 'axios';
-import uri from '../environment/environment';
+import environment from '../environment/environment';
 
 // Configuración base de axios
 const apiClient = axios.create({
-  baseURL: uri,
+  baseURL: environment.uri,
   headers: {
     'Content-Type': 'application/json',
   },
