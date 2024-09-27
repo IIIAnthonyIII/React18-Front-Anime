@@ -2,7 +2,7 @@ import apiClient from "./AxiosAPI";
 
 const getAnimes = async () => {
   try {
-    const response = await apiClient.get('anime?sort=-created_at');
+    const response = await apiClient.get('anime?sort=-created_at&embed=type');
     return response;
   } catch (error) {
     return error;

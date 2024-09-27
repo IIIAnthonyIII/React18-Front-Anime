@@ -72,6 +72,7 @@ const EditCreateAnimeAd = ({ isModalOpen, handleSubmit, handleCancel, initialVal
 
   return (
     <Modal centered
+      width={600}
       title={action + ' anime'}
       open={isModalOpen}
       onCancel={handleCancel}
@@ -80,18 +81,7 @@ const EditCreateAnimeAd = ({ isModalOpen, handleSubmit, handleCancel, initialVal
     >
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Row gutter={[16, 8]}>
-          <Col span={12}>
-            <Form.Item name="title" label="Titulo" rules={[{ required: true, message: 'Por favor ingrese el titulo!' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="name" label="Nombre">
-              <Input />
-            </Form.Item>
-            <Form.Item name="image" label="Url imagen">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
+          <Col span={9}>
             <Image height={240}
               src={initialValues.image}
               fallback={environment.errorImage}
@@ -116,20 +106,33 @@ const EditCreateAnimeAd = ({ isModalOpen, handleSubmit, handleCancel, initialVal
                 ),
               }}
             />
+            <Form.Item name="image" label="Url imagen">
+              <Input />
+            </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={[16, 8]}>
-          <Col span={12}>
+          <Col span={15}>
+            <Form.Item name="title" label="Titulo" rules={[{ required: true, message: 'Por favor ingrese el titulo!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="name" label="Nombre">
+              <Input />
+            </Form.Item>
             <Form.Item name="episodes" label="Número de episodios">
               <InputNumber min={1}/>
             </Form.Item>
-          </Col>
-          <Col span={12}>
             <Form.Item name="dateOfIssue" label="Fecha de estreno" rules={[{ required: true, message: 'Por favor ingrese la fecha!' }]}>
               <DatePicker format={{format: 'YYYY-MM-DD', type: 'mask'}}/>
             </Form.Item>
           </Col>
         </Row>
+        {/* <Row gutter={[16, 8]}>
+          <Col span={12}>
+            
+          </Col>
+          <Col span={12}>
+            
+          </Col>
+        </Row> */}
         {/* <Form.Item name="id_especialidad" label="Especialidad" rules={[{ required: true, message: 'Por favor seleccione la especialidad!' }]}> */}
           {/* <Select loading={loadingSelect} options={analisisOptions} /> */}
           {/* <Select options={specialtyOptions} showSearch filterOption={filterSpecialty}/> */}
