@@ -11,13 +11,13 @@ const getAnimes = async () => {
 
 // API parametros
 const getAnimesParams = async (page, pageSize) => {
-    try {
-      const response = await apiClient.get(`anime?per_page=${pageSize}&page=${page}`);
-      return response;
-    } catch (error) {
-      return error;
-    }
-  };
+  try {
+    const response = await apiClient.get(`anime?per_page=${pageSize}&page=${page}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
 
 const createAnime = async (animeData) => {
   try {

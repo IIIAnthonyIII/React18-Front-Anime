@@ -7,4 +7,8 @@ const AnimeErrors = {
   userDisabled: "El usuario ha sido desactivado.",
 };
 
-export { LoginErrors, AnimeErrors};
+const TypeErrors = {
+  typeNotGet: "Error al obtener los tipos...",
+}
+
+export { LoginErrors, AnimeErrors, TypeErrors};

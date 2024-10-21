@@ -2,22 +2,24 @@ import "./AnimeAd.css";
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import AnimeService from '../../../services/AnimeService';
-import { AnimeErrors } from '../../../constants/ErrorMessages';
+import { AnimeErrors, TypeErrors } from '../../../constants/ErrorMessages';
 import DeleteActiveAnimeAd from "./delete-active/DeleteActiveAnimeAd";
 import EditCreateAnimeAd from "./edit-create/EditCreateAnimeAd";
 import Notification from '../../../components/notification/Notification';
 import { Button, Image, Input, notification, Space, Table, Tag, Tooltip } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined, DeleteFilled, DownloadOutlined, EditFilled, PlusCircleOutlined, RotateLeftOutlined, RotateRightOutlined, SearchOutlined, SwapOutlined, UndoOutlined, ZoomInOutlined, ZoomOutOutlined } from '@ant-design/icons';
 import environment from "../../../environment/environment";
+import TypeService from "../../../services/TypeService";
 
 const AnimeAd = () => {
   let columns                         = [];
   let uniqueEstado                    = new Set();
   const [data, setData]               = useState([]);
+  const [dataType, setType]           = useState([]);
   const [searchText, setSearchText]   = useState('');
   const [loading, setLoading]         = useState(false);
   const [api, contextHolder]          = notification.useNotification();
-  const scroll                        = { x: 'max-content', y: "70vh" };
+  const scroll                        = { y: "70vh" };
   const filterEstado                  = [
     { text: "Activo", value: "A" },
     { text: "Inactivo", value: "I" }
@@ -34,6 +36,7 @@ const AnimeAd = () => {
   });
 
   useEffect(() => {
+    fetchType();
     fetchAnime();
     // API parametros
     // fetchAnime(tableParams.pagination.current, tableParams.pagination.pageSize);
@@ -90,15 +93,25 @@ const AnimeAd = () => {
   };
   
   // Llenar filtros
-  // data.forEach(element => {
-  //   if (!uniqueEstado.has(element.nombre_apellido)) {
-  //     uniqueEstado.add(element.nombre_apellido);
-  //     filterEstado.push({
-  //       text: element.nombre_apellido,
-  //       value: element.nombre_apellido,
-  //     });
-  //   }
-  // });
+  const fetchType = async () => {
+    let response;
+    try {
+      response = await TypeService.getTypes();
+      const types = response.data.data.map(type => ({
+        text: type.name,
+        value: type.name
+      }));
+      setType(types);
+    } catch (error) {
+      response = {
+        status: response.status,
+        response: {
+          data: { error: TypeErrors.typeNotGet }
+        }
+      }
+      Notification(api, response);
+    }
+  };
 
   const onDownload = (imgUrl) => {
     fetch(imgUrl)
@@ -129,6 +142,7 @@ const AnimeAd = () => {
     {
       title: "Portada",
       dataIndex: "image",
+      width: 100,
       render: (_, { image }) => {
         return (
           <Image width={50}
@@ -178,6 +192,23 @@ const AnimeAd = () => {
       ellipsis: true,
     },
     {
+      title: "Tipo",
+      dataIndex: "type",
+      align: "center",
+      width: 80,
+      render: (_, { type }) => {
+        return (
+          <Space size="middle">
+            <Tag>{type.name}</Tag>
+          </Space>
+        );
+      },
+      filterSearch: true,
+      filters: dataType,
+      onFilter: (value, data) => data.type.name.startsWith(value),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }}/>,
+    },
+    {
       title: "Episodios",
       dataIndex: "episodes",
       align: "center",
@@ -191,6 +222,7 @@ const AnimeAd = () => {
       title: "Estreno",
       dataIndex: "dateOfIssue",
       align: "center",
+      width: 120,
       sorter: {
         compare: (a, b) => new Date(a.dateOfIssue) - new Date(b.dateOfIssue),
         multiple: 4,
@@ -201,6 +233,7 @@ const AnimeAd = () => {
       title: "Estado",
       dataIndex: "status",
       align: "center",
+      width: 90,
       render: (_, { id, status }) => {
         let color = status === 'A' ? 'green' : 'red';
         return (
@@ -224,6 +257,7 @@ const AnimeAd = () => {
       title: "Acciones",
       key: "action",
       align: "center",
+      width: 160,
       render: (_, record) => (
         <Space size="middle">
           <Tooltip title='Editar'>
@@ -317,7 +351,7 @@ const AnimeAd = () => {
           <div className="input-group d-flex border align-items-center me-3">
             <SearchOutlined className="mx-2"/>
             <Input className="rounded-pill"
-              placeholder="Buscar paciente"
+              placeholder="Buscar anime"
               value={searchText}
               onChange={e => setSearchText(e.target.value)} />
           </div>
