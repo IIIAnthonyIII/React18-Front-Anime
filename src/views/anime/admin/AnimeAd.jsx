@@ -16,6 +16,7 @@ const AnimeAd = () => {
   let uniqueEstado                    = new Set();
   const [data, setData]               = useState([]);
   const [dataType, setType]           = useState([]);
+  const [typeSelect, setTypeSelect]   = useState([]);
   const [searchText, setSearchText]   = useState('');
   const [loading, setLoading]         = useState(false);
   const [api, contextHolder]          = notification.useNotification();
@@ -102,6 +103,7 @@ const AnimeAd = () => {
         value: type.name
       }));
       setType(types);
+      setTypeSelect(response.data.data);
     } catch (error) {
       response = {
         status: response.status,
@@ -131,10 +133,9 @@ const AnimeAd = () => {
   //Llenar columnas
   columns = [
     {
-      render: (_, { status }) => {
-        let color = status === 'A' ? 'green' : 'red';
+      render: (_, { type }) => {
         return (
-          <div style={{ background: color, width: 10, height: 40, borderRadius: 100 }}></div>
+          <div style={{ background: type.color, width: 10, height: 40, borderRadius: 100 }}></div>
         );
       },
       width: 40,
@@ -195,11 +196,11 @@ const AnimeAd = () => {
       title: "Tipo",
       dataIndex: "type",
       align: "center",
-      width: 80,
+      width: 110,
       render: (_, { type }) => {
         return (
           <Space size="middle">
-            <Tag>{type.name}</Tag>
+            <Tag color={type.color}>{type.name}</Tag>
           </Space>
         );
       },
@@ -375,6 +376,7 @@ const AnimeAd = () => {
           handleCancel={handleCancel}
           handleSubmit={handleSubmit}
           initialValues={currentItem}
+          types={typeSelect}
           action={action} />
       )}
       {isDeleteModalOpen && (

@@ -2,7 +2,7 @@ import apiClient from "./AxiosAPI";
 
 const getTypes = async () => {
   try {
-    const response = await apiClient.get('type?sort=-name');
+    const response = await apiClient.get('type?sort=-updated_at');
     return response;
   } catch (error) {
     return error;

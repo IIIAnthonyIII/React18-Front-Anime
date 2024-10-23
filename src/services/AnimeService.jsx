@@ -2,7 +2,7 @@ import apiClient from "./AxiosAPI";
 
 const getAnimes = async () => {
   try {
-    const response = await apiClient.get('anime?sort=-created_at&embed=type');
+    const response = await apiClient.get('anime?sort=-updated_at&embed=type');
     return response;
   } catch (error) {
     return error;
@@ -12,7 +12,7 @@ const getAnimes = async () => {
 // API parametros
 const getAnimesParams = async (page, pageSize) => {
   try {
-    const response = await apiClient.get(`anime?per_page=${pageSize}&page=${page}`);
+    const response = await apiClient.get(`anime?per_page=${pageSize}&page=${page}&sort=-updated_at&embed=type`);
     return response;
   } catch (error) {
     return error;
@@ -21,6 +21,7 @@ const getAnimesParams = async (page, pageSize) => {
 
 const createAnime = async (animeData) => {
   try {
+    console.log(animeData);
     const response = await apiClient.post('anime', animeData);
     return response;
   }catch (error){
@@ -30,6 +31,7 @@ const createAnime = async (animeData) => {
 
 const editAnime = async (id, animeData) => {
   try {
+    console.log(id, animeData);
     const response = await apiClient.put(`anime/${id}`, animeData);
     return response;
   } catch (error) {

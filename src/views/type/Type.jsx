@@ -7,6 +7,7 @@ import DeleteActiveType from "./delete-active/DeleteActiveType";
 import Notification from "../../components/notification/Notification";
 import { Button,Input, notification, Space, Table, Tag, Tooltip } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined, DeleteFilled, EditFilled, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import MouseAnimation from "../../components/animations/MouseAnimation";
 
 const Type = () => {
   let columns                         = [];
@@ -39,6 +40,7 @@ const Type = () => {
     try {
       response = await TypeService.getTypes();
       setData(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       response = {
         status: response.status,
@@ -55,8 +57,7 @@ const Type = () => {
   //Llenar columnas
   columns = [
     {
-      render: (_, { status }) => {
-        let color = status === 'A' ? 'green' : 'red';
+      render: (_, { color }) => {
         return (
           <div style={{ background: color, width: 10, height: 40, borderRadius: 100 }}></div>
         );
@@ -171,6 +172,7 @@ const Type = () => {
 
   return (
     <div>
+      <MouseAnimation/>
       <div className="header-content">
         <h3>Tipo</h3>
         <div className="d-flex p-0 m-0 align-items-center">
