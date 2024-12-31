@@ -345,7 +345,7 @@ const AnimeAd = () => {
   };
 
   return (
-    <div>
+    <div className="container_animead">
       <div className="header-content">
         <h3>Animes</h3>
         <div className="d-flex p-0 m-0 align-items-center">

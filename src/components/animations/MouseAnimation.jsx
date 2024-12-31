@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import "./MouseAnimation.css";
+// import "./MouseAnimation.css";
 
 const MouseAnimation = () => {
   useEffect(() => {
