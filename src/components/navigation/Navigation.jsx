@@ -18,67 +18,67 @@ const Navigation = () => {
     menu_toggle.classList.toggle("active");
   };
   return (
-    <div class="box_navigation">
-      <div class="drawer">
-        <div class="menu_toggle" onClick={menuToggle}>
+    <div className="box_navigation">
+      <div className="drawer">
+        <div className="menu_toggle" onClick={menuToggle}>
           <span></span>
         </div>
-        <div class="navigation">
-          <ul class="menu">
+        <div className="navigation">
+          <ul className="menu">
             <li>
               <a href="#">
-                <span class="icon">
+                <span className="icon">
                   {/* <ion-icon name="person-outline"></ion-icon> */}a
                 </span>
-                <span class="text">Profile</span>
+                <span className="text">Profile</span>
               </a>
             </li>
             <li>
               <a href="#">
-                <span class="icon">
+                <span className="icon">
                   {/* <ion-icon name="videocam-outline"></ion-icon> */}b
                 </span>
-                <span class="text">Videos</span>
+                <span className="text">Videos</span>
               </a>
             </li>
             <li>
               <a href="#">
-                <span class="icon">
+                <span className="icon">
                   {/* <ion-icon name="wallet-outline"></ion-icon> */}c
                 </span>
-                <span class="text">Revenue</span>
+                <span className="text">Revenue</span>
               </a>
             </li>
             <li>
               <a href="#">
-                <span class="icon">
+                <span className="icon">
                   {/* <ion-icon name="chatbubbles-outline"></ion-icon> */}d
                 </span>
-                <span class="text">Inbox</span>
+                <span className="text">Inbox</span>
               </a>
             </li>
             <li>
               <a href="#">
-                <span class="icon">
+                <span className="icon">
                   {/* <ion-icon name="settings-outline"></ion-icon> */}e
                 </span>
-                <span class="text">Settings</span>
+                <span className="text">Settings</span>
               </a>
             </li>
             <li>
               <a href="#">
-                <span class="icon">
+                <span className="icon">
                   {/* <ion-icon name="help-outline"></ion-icon> */}f
                 </span>
-                <span class="text">Support</span>
+                <span className="text">Support</span>
               </a>
             </li>
             <li>
               <a href="#">
-                <span class="icon">
+                <span className="icon">
                   {/* <ion-icon name="log-out-outline"></ion-icon> */}g
                 </span>
-                <span class="text">Logout</span>
+                <span className="text">Logout</span>
               </a>
             </li>
           </ul>

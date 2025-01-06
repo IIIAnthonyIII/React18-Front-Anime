@@ -3,7 +3,7 @@ import "./Error.css";
 
 const Error = () => {
   return (
-    <section class="error-container">
+    <section className="error-container">
       <span>
         <span>4</span>
       </span>
