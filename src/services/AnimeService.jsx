@@ -21,7 +21,6 @@ const getAnimesParams = async (page, pageSize) => {
 
 const createAnime = async (animeData) => {
   try {
-    console.log(animeData);
     const response = await apiClient.post('anime', animeData);
     return response;
   }catch (error){
@@ -31,7 +30,6 @@ const createAnime = async (animeData) => {
 
 const editAnime = async (id, animeData) => {
   try {
-    console.log(id, animeData);
     const response = await apiClient.put(`anime/${id}`, animeData);
     return response;
   } catch (error) {

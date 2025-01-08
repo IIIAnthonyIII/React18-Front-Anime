@@ -303,6 +303,7 @@ const AnimeAd = () => {
     }
   };
 
+  const animeFather = data.filter(anime => anime.id === anime.relation).sort((a, b) => a.title.localeCompare(b.title));;
   const filteredData = data.filter(item => 
     item.title.toLowerCase().includes(searchText.toLowerCase())     ||
     item.name.toLowerCase().includes(searchText.toLowerCase())      ||
@@ -376,6 +377,7 @@ const AnimeAd = () => {
           handleCancel={handleCancel}
           handleSubmit={handleSubmit}
           initialValues={currentItem}
+          dataAnime={animeFather}
           types={typeSelect}
           action={action} />
       )}
