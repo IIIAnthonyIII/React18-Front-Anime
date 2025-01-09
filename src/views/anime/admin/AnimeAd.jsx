@@ -11,9 +11,10 @@ import { CheckCircleOutlined, CloseCircleOutlined, DeleteFilled, DownloadOutline
 import environment from "../../../environment/environment";
 import TypeService from "../../../services/TypeService";
 
-const AnimeAd = () => {
+const AnimeAd = ({navigHandled}) => {
   let columns                         = [];
   let uniqueEstado                    = new Set();
+  const [width, setWidth]             = useState(navigHandled);
   const [data, setData]               = useState([]);
   const [dataType, setType]           = useState([]);
   const [typeSelect, setTypeSelect]   = useState([]);
@@ -35,6 +36,10 @@ const AnimeAd = () => {
       position: ["bottomRight"]
     },
   });
+
+  useEffect(() => {
+    setWidth(navigHandled);
+  }, [navigHandled]);
 
   useEffect(() => {
     fetchType();
@@ -346,7 +351,7 @@ const AnimeAd = () => {
   };
 
   return (
-    <div className="container_animead">
+    <div style={{width: width+'px', transition: '0.5s'}}>
       <div className="header-content">
         <h3>Animes</h3>
         <div className="d-flex p-0 m-0 align-items-center">

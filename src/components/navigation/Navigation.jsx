@@ -1,22 +1,22 @@
 import React from "react";
 import "./Navigation.css";
+import { useEffect } from "react";
 
-const Navigation = () => {
-  const options = [
-    { option: 'Profile', icon: 'a' },
-    { option: 'Videos', icon: 'b' },
-    { option: 'Revenue', icon: 'c' },
-    { option: 'Inbox', icon: 'd' },
-    { option: 'Settings', icon: 'e' },
-    { option: 'Support', icon: 'f' },
-    { option: 'Logout', icon: 'g' },
-  ]
+const Navigation = ({onOptionSelect}) => {
+  const [active, setActive] = React.useState(false);
+
+  useEffect(() => {
+    onOptionSelect(active);
+  }, [active]);
+  
   const menuToggle =() => {
     const menu_toggle = document.querySelector(".menu_toggle");
     const navigation = document.querySelector(".navigation");
     navigation.classList.toggle("active");
     menu_toggle.classList.toggle("active");
+    setActive(!active);
   };
+  
   return (
     <div className="box_navigation">
       <div className="drawer">
