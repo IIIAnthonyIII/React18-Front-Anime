@@ -9,11 +9,12 @@ import { Button,Input, notification, Space, Table, Tag, Tooltip } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined, DeleteFilled, EditFilled, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import MouseAnimation from "../../components/animations/MouseAnimation";
 
-const Type = () => {
+const Type = ({navigHandled}) => {
   let columns                         = [];
   const [data, setData]               = useState([]);
   const [searchText, setSearchText]   = useState('');
   const [loading, setLoading]         = useState(false);
+  const [width, setWidth]             = useState(navigHandled);
   const [api, contextHolder]          = notification.useNotification();
   const scroll                        = { x: 'max-content', y: "70vh" };
   const filterEstado                  = [
@@ -29,6 +30,10 @@ const Type = () => {
       position: ["bottomRight"]
     },
   });
+
+  useEffect(() => {
+    setWidth(navigHandled);
+  }, [navigHandled]);
 
   useEffect(() => {
     fetchType();
@@ -171,7 +176,7 @@ const Type = () => {
   };
 
   return (
-    <div>
+    <div style={{width: width+'px', transition: '0.5s'}}>
       <MouseAnimation/>
       <div className="header-content">
         <h3>Tipo</h3>

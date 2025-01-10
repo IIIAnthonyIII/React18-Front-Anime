@@ -84,6 +84,7 @@
 .drawer .navigation {
   position: relative;
   width: 80px;
+  height: 100vh;
   background: #fff;
   display: flex;
   align-items: flex-start;
@@ -91,10 +92,11 @@
   border-radius: 10px;
   transition: 0.5s;
   overflow: hidden;
+  border: solid 1px black;
 }
 
 .drawer .navigation.active {
-  width: 300px;
+  width: 250px;
 }
 
 .drawer .navigation .menu {
@@ -137,6 +139,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.25rem;
+  /* font-size: 1.25rem; */
   margin-left: 10px;
 }
