@@ -45,7 +45,6 @@ const Type = ({navigHandled}) => {
     try {
       response = await TypeService.getTypes();
       setData(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       response = {
         status: response.status,

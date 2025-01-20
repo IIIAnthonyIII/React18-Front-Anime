@@ -142,3 +142,8 @@
   /* font-size: 1.25rem; */
   margin-left: 10px;
 }
+
+.drawer .navigation .menu .active a{
+  background: #379fff;
+  color: #fff;
+}
