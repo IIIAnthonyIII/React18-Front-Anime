@@ -1,10 +1,10 @@
-import dayjs from 'dayjs';
-import moment from 'moment';
-import "./EditCreateAnimeAd.css";
-import React, { useEffect, useState } from 'react';
-import AnimeService from '../../../../services/AnimeService';
-import environment from '../../../../environment/environment';
 import { Button, Checkbox, Col, DatePicker, Form, Image, Input, InputNumber, Modal, Row, Select } from 'antd';
+import environment from '../../../../environment/environment';
+import AnimeService from '../../../../services/AnimeService';
+import React, { useEffect, useState } from 'react';
+import "./EditCreateAnimeAd.css";
+import moment from 'moment';
+import dayjs from 'dayjs';
 
 const EditCreateAnimeAd = ({ isModalOpen, handleSubmit, handleCancel, initialValues, dataAnime, types, action }) => {
   const [form]                                  = Form.useForm();

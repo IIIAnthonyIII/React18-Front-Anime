@@ -350,7 +350,7 @@ const AnimeAd = ({navigHandled}) => {
   };
 
   return (
-    <div style={{width: width+'px', transition: '0.5s'}}>
+    <div style={{width: width+'vw', transition: '0.5s'}}>
       <div className="header-content">
         <h3>Animes</h3>
         <div className="d-flex p-0 m-0 align-items-center">

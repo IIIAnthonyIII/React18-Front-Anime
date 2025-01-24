@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import Error from "../views/error/Error";
-import { Route, Routes } from "react-router-dom";
-import AnimeAd from "../views/anime/admin/AnimeAd";
-import Dashboard from "../views/dashboard/Dashboard";
-import Type from "../views/type/Type";
 import Navigation from "../components/navigation/Navigation";
+import Dashboard from "../views/dashboard/Dashboard";
+import AnimeAd from "../views/anime/admin/AnimeAd";
+import { Route, Routes } from "react-router-dom";
+import Error from "../views/error/Error";
+import React, { useState } from "react";
+import Type from "../views/type/Type";
 import "./router.css";
 
 const RouterApp = () => {
-  const [width, setWidth] = useState(1450);
+  const [width, setWidth] = useState(93);
   const handleOptionSelect = (option) => {
-    setWidth((option === true) ? 1270 : 1450);
+    setWidth((option === true) ? 81 : 93);
   };
   return (
     <div className="dashboard">

@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-const Dashboard = () => {
+const Dashboard = ({navigHandled}) => {
+  const [width, setWidth] = useState(navigHandled);
+  useEffect(() => {
+    setWidth(navigHandled);
+  }, [navigHandled]);
   return (
-    <div>Dashboard</div>
+    <div style={{width: width+'vw', transition: '0.5s'}}>
+      <div>Dashboard</div>
+    </div>
   )
 }
 

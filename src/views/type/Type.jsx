@@ -175,7 +175,7 @@ const Type = ({navigHandled}) => {
   };
 
   return (
-    <div style={{width: width+'px', transition: '0.5s'}}>
+    <div style={{width: width+'vw', transition: '0.5s'}}>
       <MouseAnimation/>
       <div className="header-content">
         <h3>Tipo</h3>
