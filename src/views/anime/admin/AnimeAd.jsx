@@ -52,9 +52,13 @@ const AnimeAd = ({navigHandled}) => {
   const fetchAnime = async () => {
     let response;
     setLoading(true);
+    
     try {
+      const startTime = performance.now();
       response = await AnimeService.getAnimes();
       setData(response.data.data);
+    const endTime = performance.now();
+    console.log(`Fetch anime data took ${endTime - startTime} milliseconds`);
     } catch (error) {
       response = {
         status: response.status,

@@ -8,10 +8,10 @@ const Navigation = ({onOptionSelect}) => {
   const [active, setActive] = React.useState(false);
   const [currentOption, setCurrentOption] = React.useState('');
   const options = [
-    { option: 'Dashboard', icon: DashboardOutlined, route: '/' },
-    { option: 'Anime', icon: GlobalOutlined, route: '/animead' },
-    { option: 'Tipo', icon: BranchesOutlined, route: '/type' },
-    { option: 'Logout', icon: LogoutOutlined, route: '/login' },
+    { option: 'Dashboard', icon: <DashboardOutlined/>, route: '/' },
+    { option: 'Anime', icon: <GlobalOutlined/>, route: '/animead' },
+    { option: 'Tipo', icon: <BranchesOutlined/>, route: '/type' },
+    { option: 'Logout', icon: <LogoutOutlined/>, route: '/login' },
   ];
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const Navigation = ({onOptionSelect}) => {
               <li key={index} title={option.option} className={currentOption === option.option ? 'active' : ''} onClick={getCurrentRoute}>
                 <Link to={option.route}> 
                   <span className="icon">
-                    {React.createElement(option.icon)}
+                    {option.icon}
                   </span>
                   <span className="text">{option.option}</span>
                 </Link>
