@@ -42,7 +42,7 @@ const EditCreateAnimeAd = ({ isModalOpen, handleSubmit, handleCancel, initialVal
       const formattedValues = {
         ...values,
         episodes: (values.episodes) ? values.episodes : 0,
-        relation: (checked) ? null : values.relation,
+        relation: (checked) ? "" : values.relation,
         dateOfIssue: moment(new Date(values.dateOfIssue)).format('YYYY-MM-DD HH:mm:ss')
       };
       if (action==='Editar') response = await AnimeService.editAnime(initialValues.id, formattedValues);

@@ -9,10 +9,9 @@ const apiClient = axios.create({
   },
 });
 
-let token = sessionStorage.getItem('token');
-
 apiClient.interceptors.request.use(
   (config) => {
+    let token = sessionStorage.getItem('token');
     if (!token) token = sessionStorage.getItem('token');
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
